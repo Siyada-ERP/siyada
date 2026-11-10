@@ -1,23 +1,19 @@
 name: Release
 
-# ادفع Tag بالشكل v1.1.0 والـ workflow ده هيعمل لوحده:
-#   1) اختبار المحرك المحاسبي  2) بناء SIYADA.html  3) تجهيز SIYADA_Server.zip
-#   4) بناء مثبّت الويندوز SIYADA-Setup-<version>.exe  5) نشر كل ده في صفحة Releases
-# يشتغل على ويندوز علشان مثبّت NSIS يتبني بشكل أصلي (من غير Wine).
+# Push a tag such as v1.1.0 and this workflow tests the code, builds the two
+# deliverables and publishes them on the GitHub Releases page:
+# - SIYADA.html          the single-file offline app
+# - SIYADA_Server.zip    server + offline file + docs, ready to deploy
 on:
   push:
     tags: ["v*.*.*"]
-  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   release-build:
-    runs-on: windows-latest
-    defaults:
-      run:
-        shell: bash
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -25,42 +21,34 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
       - name: Install dependencies
         run: npm ci
 
-      - name: Build application
-        run: npm run build
-
-      - name: Tests (engine and server)
-        run: npm run test:engine && npm run test:server
+      - name: Test (build, engine and server)
+        run: npm test
 
       - name: Package Server
-        run: npm run package:server
+        run: npm run pack
 
-      - name: Build Windows installer
-        env:
-          CSC_IDENTITY_AUTO_DISCOVERY: "false"
-        run: npm run build:desktop
+      - name: Build Desktop App
+        run: npm run desktop:dist
 
       - name: Prepare Release Notes
         run: |
           node -e "
             const fs = require('fs');
             const pkg = require('./package.json');
-            fs.writeFileSync('release-notes.md', '### SIYADA ' + pkg.version + '\n\n- SIYADA-Setup-' + pkg.version + '.exe : مثبّت الويندوز\n- SIYADA.html : النسخة الأوفلاين (ملف واحد)\n- SIYADA_Server.zip : السيرفر + الدليل\n');
+            fs.writeFileSync('release-notes.md', \`### SIYADA Release \${pkg.version}\n\nAutomated release for version \${pkg.version}.\`);
           "
 
       - name: Publish to GitHub Releases
-        if: startsWith(github.ref, 'refs/tags/')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # حذف الـ Release القديم لنفس الـ Tag (بدون حذف الـ Tag نفسه) لمنع التعارض عند إعادة التشغيل
+          # حذف الإصدار القديم بنفس الـ tag (الـ tag نفسه بيفضل، عشان الـ workflow ما يتحذفش من تحت رجليه)
           gh release delete "${GITHUB_REF_NAME}" --yes || true
+
+          # إنشاء الإصدار الجديد ورفع الملفات المطلوبة
           gh release create "${GITHUB_REF_NAME}" \
             dist/SIYADA.html \
             dist/SIYADA_Server.zip \
@@ -69,13 +57,3 @@ jobs:
             dist/desktop/*.blockmap \
             --title "SIYADA ${GITHUB_REF_NAME}" \
             --notes-file release-notes.md
-
-      - name: Keep build files (manual runs)
-        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: siyada-windows
-          path: |
-            dist/SIYADA.html
-            dist/SIYADA_Server.zip
-            dist/desktop/SIYADA-Setup-*.exe

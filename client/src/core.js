@@ -19,7 +19,7 @@ APP.net = APP.net || { on: false, ready: false, detect: async () => false };
    entry: [route,label(,arg)] | ['!act',label] | ['-',title] (section header, '' = separator) | ['>',label,[entries]] (fly-out) */
 const MENU = [
   ['ملف', [['settings', 'إعدادات البرنامج'], ['appinfo', 'معلومات البرنامج'], ['mapping', 'ربط الحسابات'], ['>', 'البيانات', [['import', 'استيراد بيانات'], ['backup', 'نسخة احتياطية'], ['checks', 'فحوصات التناسق']]], ['-', ''], ['closing', 'إقفال السنة']]],
-  ['المبيعات', [['sale', 'فاتورة بيع'], ['salret', 'مرتجع مبيعات'], ['receipt', 'تحصيل من عميل (سند قبض)'], ['-', 'المراجع والتقارير'], ['refsale', 'مرجع المبيعات'], ['netqty', 'الكمية بعد المرتجع', 's'], ['qtydisc', 'خصم الكمية الشهري'], ['walog', 'رسائل واتساب'], ['salesrep', 'تقرير المبيعات والمشتريات']]],
+  ['المبيعات', [['sale', 'فاتورة بيع'], ['salret', 'مرتجع مبيعات'], ['receipt', 'تحصيل من عميل (سند قبض)'], ['-', 'المراجع والتقارير'], ['refsale', 'مرجع المبيعات'], ['netqty', 'الكمية بعد المرتجع', 's'], ['salesrep', 'تقرير المبيعات والمشتريات']]],
   ['المشتريات', [['purchase', 'فاتورة شراء'], ['purret', 'مرتجع مشتريات'], ['payment', 'سداد لمورد (سند دفع)'], ['-', 'المراجع والتقارير'], ['refpur', 'مرجع المشتريات'], ['netqty', 'الكمية بعد المرتجع', 'p']]],
   ['المخازن', [['warehouse', 'المخازن'], ['stocktransfer', 'تحويل بين المخازن'], ['items', 'الأصناف'], ['prices', 'قوائم الأسعار']]],
   ['العملاء والموردين', [['customers', 'العملاء'], ['suppliers', 'الموردون'], ['aging', 'أعمار ديون العملاء'], ['supplieraging', 'أعمار ديون الموردين'], ['-', ''], ['statement', 'كشف حساب']]],
@@ -90,7 +90,7 @@ APP.sheetHead = function (title, sub) {
 function applyCompany() {
   const s = APP.S.settings;
   document.title = s.company + ' — SIYADA';
-  document.documentElement.dataset.theme = s.uiTheme || 'navy_gold';
+  document.documentElement.dataset.theme = s.uiTheme || 'green_gold';
   document.documentElement.dataset.density = s.uiDensity || 'comfortable';
   const b = $('#brand'); if (b) b.innerHTML = APP.logoHtml('logo') + '<div class="co">' + esc(s.company) + '</div><div class="app">SIYADA</div>';
 }

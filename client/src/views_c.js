@@ -38,7 +38,7 @@ function newTx(f) {
   const dr = f.side === 'dr' ? r2(f.amount) : 0, cr = f.side === 'cr' ? r2(f.amount) : 0;
   return { id, date: f.date, source: f.source, row, doc: f.doc, type: f.type, partyType: f.partyType || '', partyCode: f.partyCode || '', partyName: f.partyName || '', itemCode: f.itemCode || '', itemName: f.itemName || '', qty: f.qty || 0, pieces: f.pieces || 0, price: f.price || 0, amount: dr + cr, debit: dr, credit: cr, acc: f.acc || '', desc: f.desc || '', jno: 0, seq: 1e7 + id };
 }
-APP.nextDoc = nextDoc; APP.bumpDoc = bumpDoc; APP.methodOpts = methodOpts; APP.newTx = newTx; APP.kindOfDoc = kindOfDoc;
+APP.nextDoc = nextDoc; APP.bumpDoc = bumpDoc; APP.methodOpts = methodOpts;
 const KIND_BY_ROUTE = Object.keys(KINDS);
 
 /* ---------- reconstruct a saved document for editing ---------- */
@@ -151,7 +151,7 @@ function saveInvoice(again) {
     if (paid > 0) out.push(newTx(Object.assign({}, base, { type: K.pay.tp, side: K.pay.side, amount: paid, acc: $('#fAcc').value, desc: note })));
     out.forEach(t => APP.S.transactions.push(t)); bumpDoc(doc);
     APP.UI.keepDate = date;
-    if (APP.commit((edit ? 'تم تعديل ' : 'تم حفظ ') + K.title + ' ' + doc + '.', { norender: true })) { if (again && !edit) { APP.go(kind); APP.rerender(); } else { APP.go('doc', doc); if (!edit && APP.waAfterSave) APP.waAfterSave(doc); } }
+    if (APP.commit((edit ? 'تم تعديل ' : 'تم حفظ ') + K.title + ' ' + doc + '.', { norender: true })) { if (again && !edit) { APP.go(kind); APP.rerender(); } else APP.go('doc', doc); }
   };
   if (kind === 'sale' && p.limit > 0) { const r = APP.pBy.get(p.code); let prev = r ? r.balance : 0; if (edit) prev -= APP.S.transactions.filter(t => t.doc === edit && t.partyCode === p.code).reduce((s, t) => s + t.debit - t.credit, 0); const after = prev + net - paid; if (after > p.limit + 0.004) { APP.confirm('الحد الائتماني للعميل ' + p.name + ' هو ' + fmt(p.limit) + '، ورصيده بعد الفاتورة هيبقى ' + fmt(after) + '. تكمل الحفظ؟', 'حفظ').then(ok => { if (ok) finish(); }); return; } }
   finish();
@@ -177,7 +177,7 @@ function saveVoucher(again) {
   if (!APP.guard(date)) return; if (edit && APP.S.transactions.filter(t => t.doc === edit).some(t => !APP.guard(t.date))) return;
   if (edit) APP.S.transactions = APP.S.transactions.filter(t => t.doc !== edit);
   APP.S.transactions.push(newTx({ date, source: K.src, doc, type: K.tp, side: K.side, amount: amt, partyType: K.pty, partyCode: p.code, partyName: p.name, acc: $('#fAcc').value, desc: $('#fDesc').value.trim() })); bumpDoc(doc); APP.UI.keepDate = date;
-  if (APP.commit((edit ? 'تم تعديل ' : 'تم حفظ ') + K.title + ' ' + doc + '.', { norender: true })) { if (again && !edit) { APP.go(kind); APP.rerender(); } else { APP.go('doc', doc); if (!edit && APP.waAfterSave) APP.waAfterSave(doc); } }
+  if (APP.commit((edit ? 'تم تعديل ' : 'تم حفظ ') + K.title + ' ' + doc + '.', { norender: true })) { if (again && !edit) { APP.go(kind); APP.rerender(); } else APP.go('doc', doc); }
 }
 
 /* ---------- treasury voucher (expense / income) ---------- */
