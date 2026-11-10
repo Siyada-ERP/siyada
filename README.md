@@ -37,7 +37,7 @@ npm run build          # ينتج dist/SIYADA.html (وينسخه إلى server/p
 - **الملف المستقل:** افتح `dist/SIYADA.html` في المتصفح.
 - **السيرفر:** `npm start` ثم افتح <http://localhost:3000> — أول حساب يُسجَّل هو مدير الخدمة.
   على ويندوز يمكنك أيضًا الضغط مرتين على `server/start-windows.bat` (وعلى لينكس/ماك `server/start.sh`): يبنيان صفحة التطبيق تلقائيًا في أول مرة.
-- **برنامج Windows:** بعد تثبيت متطلبات التطوير شغّل `npm run desktop:dist` لإنشاء `dist/desktop/SIYADA-Setup-1.0.0.exe`. النسخة المحلية لا تحتاج Node.js بعد تثبيتها، وبياناتها محفوظة على جهاز المستخدم.
+- **برنامج Windows:** بعد تثبيت متطلبات التطوير شغّل `npm run desktop:dist` لإنشاء `dist/desktop/SIYADA-Setup-<الإصدار>.exe` (أو خلّي GitHub Actions يبنيه لك: ادفع Tag بالشكل `v1.1.0` وهتلاقي الـ exe في صفحة Releases — التفاصيل في `docs/WINDOWS.ar.md`). النسخة المحلية لا تحتاج Node.js بعد تثبيتها، وبياناتها محفوظة على جهاز المستخدم.
   عند نشر إصدار جديد عبر GitHub Releases، يفحص البرنامج التحديث تلقائيًا ويطلب إعادة التشغيل لتثبيته.
 
 للنشر على الإنترنت (Docker + HTTPS تلقائي) راجع [docs/DEPLOYMENT.ar.md](docs/DEPLOYMENT.ar.md).

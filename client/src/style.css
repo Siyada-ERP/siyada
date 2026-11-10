@@ -4,6 +4,11 @@
   --blue:#1f4e8c;--blue-d:#173b6b;--red:#a63a2e;--pos:#1c6e47;--warn:#9a6700;
   --font:"Segoe UI","Noto Sans Arabic","Noto Kufi Arabic",Tahoma,"Helvetica Neue",Arial,sans-serif;
 }
+html[data-theme="navy_gold"]{
+  --g9:#0c1a38;--g8:#13284f;--g7:#1b3a72;--brass:#d2a94a;--brass-d:#8f6c12;
+  --paper:#ffffff;--desk:#e9edf4;--rule:#cbd3e2;--rule2:#e1e6f0;--ink:#0f1a30;--muted:#566079;
+  --blue:#1d4f9f;--blue-d:#143a78;--red:#b0382d;--pos:#17704a;--warn:#9a6700;
+}
 html[data-theme="blue_modern"]{
   --g9:#102a43;--g8:#173f5f;--g7:#20639b;--brass:#2f80ed;--brass-d:#1d5fa7;
   --desk:#e8eef5;--rule:#c7d4e2;--rule2:#e1e8f0;--blue:#20639b;--blue-d:#174a73;
@@ -368,3 +373,37 @@ td.netq,th.netq{background:rgba(201,161,63,.1)}
 @media screen and (max-width:700px){
   .lines tr.ln{grid-template-columns:1fr 1fr 1fr 1fr 34px}
 }
+
+/* ---------- navy & gold identity (default) ---------- */
+html[data-theme="navy_gold"] #menubar{background:linear-gradient(180deg,#0f2147,#0a1630);border-bottom:2px solid var(--brass)}
+html[data-theme="navy_gold"] .btn.primary{background:linear-gradient(180deg,#245cb8,#1a4690);border-color:#143a78}
+html[data-theme="navy_gold"] .grid thead th{background:#14284f;color:#fff;border-color:#14284f}
+html[data-theme="navy_gold"] .grid tbody tr:nth-child(even) td{background:#f5f7fb}
+html[data-theme="navy_gold"] .grid tbody tr:hover td{background:#fbf5e3}
+html[data-theme="navy_gold"] .kpi.accent{border-top-color:var(--brass)}
+
+/* ---------- right-click menu on registers ---------- */
+.ctxm{position:fixed;z-index:80;min-width:220px;background:var(--paper);border:1px solid var(--rule);border-radius:8px;box-shadow:0 12px 32px rgba(10,22,48,.28);padding:5px;font-size:.95rem}
+.ctxm .ci{display:flex;align-items:center;gap:10px;width:100%;text-align:start;background:none;border:0;border-radius:5px;padding:7px 10px;cursor:pointer;color:var(--ink)}
+.ctxm .ci:hover,.ctxm .ci:focus-visible{background:#eaf0fb;outline:none}
+.ctxm .ci.danger{color:var(--red)}
+.ctxm .ci.danger:hover{background:#fdecea}
+.ctxm .ci[disabled]{opacity:.45;cursor:default}
+.ctxm .ci b{width:22px;text-align:center;font-weight:400}
+.ctxm hr{border:0;border-top:1px solid var(--rule2);margin:4px 2px}
+.ctxm .ch{padding:5px 10px 3px;color:var(--muted);font-size:.8rem;direction:ltr;text-align:right}
+tr.ctxsel td{background:#e7effc!important;box-shadow:inset 0 0 0 9999px rgba(29,79,159,.06)}
+.hint-ctx{color:var(--muted);font-size:.84rem;margin:-4px 0 10px}
+
+/* ---------- monthly quantity discount ---------- */
+.qd-st{display:inline-block;border-radius:999px;padding:1px 10px;font-size:.82rem;font-weight:700;white-space:nowrap}
+.qd-st.due{background:#fff1cf;color:#7a5200}.qd-st.part{background:#fde4c8;color:#8a4600}.qd-st.done{background:#dcf3e6;color:#17704a}
+.qd-st.off,.qd-st.none{background:#e8ebf2;color:#566079}.qd-st.bad{background:#fde3e0;color:#a2271b}
+.qd-in{width:100%;min-width:90px}
+td.qd-c{min-width:230px}
+.qd-msg{margin:10px 0;padding:9px 14px;border-radius:6px;background:#eef3fb;border:1px solid #cbd7ee;color:#173b6b}
+
+/* ---------- WhatsApp ---------- */
+textarea.in.wa-box{width:100%;min-height:210px;resize:vertical;line-height:1.7;direction:rtl}
+.wa-meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:8px;color:var(--muted);font-size:.9rem}
+.btn.wa{background:#1fa855;border-color:#168a45;color:#fff}.btn.wa:hover{background:#168a45}

@@ -21,6 +21,7 @@ async def main():
         await page.goto(URL); await page.wait_for_selector('#suCo')
         await page.fill('#suCo', 'شركة الاختبار الضريبي'); await page.fill('#suTax', '999-111-222'); await page.fill('#suDt', '2025-01-01')
         await page.click('text=ابدأ بدفاتر جديدة'); await page.wait_for_selector('#app')
+        await page.evaluate("() => { APP.S.settings.wa = { on: false }; }")
         bal = lambda c: page.evaluate("c => APP.bal(c)", c)
         go = lambda h: page.evaluate("h => { location.hash = h }", '#/' + h)
         # settings: VAT on 14%, ETA activity

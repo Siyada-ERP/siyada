@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+<title>اتصال بسيرفر SIYADA</title>
+<style>
+  :root { --navy:#0f1f3d; --gold:#c9a24a; --ink:#1b2438; --mut:#6a7388; --bad:#b3261e; --ok:#1c7c4d; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.7 "Segoe UI",Tahoma,Arial,sans-serif; color:var(--ink); background:#f4f6fb; }
+  header { background:var(--navy); color:#fff; padding:14px 22px; border-bottom:3px solid var(--gold); font-weight:700; font-size:17px; }
+  main { padding:20px 22px; }
+  label { display:block; font-weight:600; margin-bottom:6px; }
+  input { width:100%; padding:10px 12px; border:1px solid #c5ccdb; border-radius:8px; font:inherit; direction:ltr; text-align:left; }
+  input:focus { outline:2px solid var(--gold); border-color:var(--gold); }
+  p { color:var(--mut); margin:8px 0 14px; font-size:13.5px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+  button { padding:9px 18px; border-radius:8px; border:1px solid #b9c1d3; background:#fff; font:inherit; cursor:pointer; }
+  button.p { background:var(--navy); color:#fff; border-color:var(--navy); }
+  button:disabled { opacity:.55; cursor:wait; }
+  #msg { min-height:24px; margin-top:12px; font-weight:600; }
+  #msg.e { color:var(--bad); } #msg.o { color:var(--ok); }
+  #cur { background:#fff; border:1px solid #dde2ee; border-radius:8px; padding:8px 12px; margin-bottom:14px; font-size:13.5px; }
+</style>
+</head>
+<body>
+<header>اتصال برنامج SIYADA بسيرفر الشركة</header>
+<main>
+  <div id="cur"></div>
+  <label for="u">عنوان السيرفر</label>
+  <input id="u" placeholder="https://erp.example.com   أو   http://192.168.1.10:3000" spellcheck="false" autofocus>
+  <p>اكتب العنوان اللي بيشتغل عليه سيرفر SIYADA. بعد الاتصال هتدخل بالإيميل وكلمة المرور، وتقدر تسجّل خروج من قائمة الحساب داخل البرنامج. لو سيبت البرنامج يشتغل على الجهاز بس، مفيش حسابات ولا مزامنة.</p>
+  <div class="row">
+    <button class="p" id="go">اتصال</button>
+    <button id="loc">العمل على الجهاز بدون سيرفر</button>
+    <button id="cl">إلغاء</button>
+  </div>
+  <div id="msg"></div>
+</main>
+<script>
+  const $ = id => document.getElementById(id), D = window.siyadaDesktop;
+  const say = (t, c) => { $('msg').textContent = t || ''; $('msg').className = c || ''; };
+  D.current().then(c => { $('cur').textContent = c ? 'متصل حالياً بـ: ' + c : 'الوضع الحالي: يعمل على هذا الجهاز بدون سيرفر'; if (c) $('u').value = c; });
+  const busy = b => { $('go').disabled = $('loc').disabled = b; };
+  $('go').onclick = async () => {
+    const v = $('u').value.trim(); if (!v) { say('اكتب عنوان السيرفر الأول.', 'e'); return; }
+    busy(true); say('جاري الاتصال…');
+    const r = await D.connect(v); busy(false);
+    if (!r.ok) say(r.error, 'e'); else say('تم الاتصال.', 'o');
+  };
+  $('loc').onclick = async () => { busy(true); await D.local(); busy(false); };
+  $('cl').onclick = () => D.close();
+  $('u').addEventListener('keydown', e => { if (e.key === 'Enter') $('go').click(); if (e.key === 'Escape') D.close(); });
+</script>
+</body>
+</html>

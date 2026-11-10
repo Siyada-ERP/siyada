@@ -15,6 +15,7 @@ async def main():
         page.on('pageerror', lambda e: errs.append('PAGEERROR ' + str(e))); page.on('console', lambda m: errs.append('CONSOLE ' + m.text) if m.type == 'error' else None)
         await page.goto(URL); await page.wait_for_selector('#suCo'); await page.fill('#suCo', 'شركة الاختبار'); await page.fill('#suTax', '999-111-222'); await page.fill('#suDt', '2025-01-01')
         await page.click('text=ابدأ بدفاتر جديدة'); await page.wait_for_selector('#app')
+        await page.evaluate("() => { APP.S.settings.wa = { on: false }; }")
         async def go(h):
             # mark what is on screen, change the route, and wait until that content has really been replaced:
             # many screens share selectors (#results table.grid), so waiting for a selector alone can see the previous page
