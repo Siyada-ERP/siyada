@@ -33,6 +33,7 @@ const MODULES = [
   'views_d.js',   // reports: ledger, trial balance, income statement, balance sheet, party statements
   'views_e.js',   // year-end closing, VAT report, e-invoice (ETA) draft, price lists, alerts
   'views_f.js',   // sales/purchase references, net quantity after returns, employees and payroll
+  'views_g.js',   // right-click menu on registers, monthly quantity discount, WhatsApp messages
   'net.js',       // server mode client: sessions, snapshot load, diff-based sync, long-poll, roles
   'net_ui.js',    // server mode screens: login, register, reset, invites, company picker, admin
 ];

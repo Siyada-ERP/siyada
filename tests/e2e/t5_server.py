@@ -63,6 +63,7 @@ async def main():
             await A.click('#auMain'); await A.wait_for_selector('#suCo')
             check('company prefilled in wizard', await A.input_value('#suCo'), 'شركة النور للتجارة')
             await A.click('text=ابدأ بدفاتر جديدة'); await A.wait_for_selector('#app'); await A.wait_for_timeout(600)
+            await A.evaluate("() => { APP.S.settings.wa = { on: false }; }")
             check('role owner', await A.evaluate('APP.net.role'), 'owner')
             check('brand shows company', (await A.inner_text('#brand')).split('\n')[0], 'شركة النور للتجارة')
             check('settings synced', await A.evaluate("APP.net.api('GET','/api/c/'+APP.net.cid+'/snapshot').then(s => s.records.settings[0].data.company)"), 'شركة النور للتجارة')
@@ -98,6 +99,7 @@ async def main():
             check('B customers', await B.evaluate("APP.S.parties.length"), 2)
             check('B sees company name', await B.evaluate("APP.S.settings.company"), 'شركة النور للتجارة')
             # ---------- 5) live sync B -> A
+            await B.evaluate("() => { APP.S.settings.wa = { on: false }; }")
             await go(B, 'receipt'); await B.wait_for_selector('#frm'); await B.fill('#fD', '2025-06-12'); await B.fill('#fP', 'C-001 - عميل أ'); await B.fill('#fAmt', '50'); await B.click('[data-act="saveDoc"]'); await B.wait_for_selector('.sig')
             check('A receives B receipt live', await wait_for(A, "APP.bal('1201') === 150", 6000), True)
             check('A tx count == B tx count', await A.evaluate("APP.S.transactions.length"), await B.evaluate("APP.S.transactions.length"))
@@ -213,6 +215,7 @@ async def main():
             await A.click('.nvh.end > .nvt'); await A.click('[data-act="switchCo"]'); await A.wait_for_selector('.cocard'); await A.fill('#auCo', 'شركة ثانية'); await A.click('#auMain'); await A.wait_for_selector('#suCo'); await A.screenshot(path=SHOTS + '/s10_second.png')
             check('2nd company empty (isolated)', await A.evaluate("APP.S === null"), True)
             await A.click('text=ابدأ بدفاتر جديدة'); await A.wait_for_selector('#app'); await A.wait_for_timeout(500)
+            await A.evaluate("() => { APP.S.settings.wa = { on: false }; }")
             check('2nd company no parties', await A.evaluate("APP.S.parties.length"), 0)
             check('2nd company name', await A.evaluate("APP.S.settings.company"), 'شركة ثانية')
             for pg in (A, B, C):

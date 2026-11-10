@@ -14,6 +14,7 @@ async def main():
         page.on('pageerror', lambda e: errs.append(str(e))); page.on('console', lambda m: errs.append(m.text) if m.type == 'error' else None)
         await page.goto(URL); await page.wait_for_selector('#suCo'); await page.fill('#suCo', 'شركة الأرز'); await page.fill('#suTax', '111-222-333'); await page.fill('#suDt', '2025-01-01')
         await page.click('text=ابدأ بدفاتر جديدة'); await page.wait_for_selector('#app')
+        await page.evaluate("() => { APP.S.settings.wa = { on: false }; }")
         go = lambda h: page.evaluate("h => { location.hash = h }", '#/' + h)
         await page.evaluate("""() => { const S = APP.S;
           S.parties.push({code:'C-01',name:'عميل',type:'عميل',phone:'',address:'',opening:0,limit:0,priceList:''});
