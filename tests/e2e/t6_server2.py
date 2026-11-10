@@ -47,7 +47,6 @@ async def main():
             check('server import totals == offline', await A.evaluate("JSON.stringify(APP.totals())"), ref)
             check('server import entries', await A.evaluate("APP.R.counts.entries"), refE)
             check('A idle after import', await wait_for(A, "!APP.net.dirty && !APP.net.pushing", 10000), True)
-            await A.evaluate("() => { APP.S.settings.wa = { on: false }; }")
             # second user in same company loads big snapshot
             res = await A.evaluate("APP.net.api('POST','/api/c/'+APP.net.cid+'/invite',{email:'two@t.com',role:'accountant'})"); link = res['link']
             ctxB, B = await mk(b); t0 = time.time(); await B.goto(link); await B.wait_for_selector('#auPw'); await B.fill('#auPw', 'Two#123456'); await B.fill('#auPw2', 'Two#123456'); await B.click('#auMain'); await B.wait_for_selector('#app', timeout=60000)

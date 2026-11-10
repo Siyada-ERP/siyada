@@ -25,7 +25,6 @@ async def main():
         await page.fill('#suCo', 'شركة اختبار')
         await page.fill('#suDt', '2026-01-01')
         await page.click('text=ابدأ بدفاتر جديدة')
-        await page.evaluate("() => { APP.S.settings.wa = { on: false }; }")
         await page.wait_for_selector('#app')
         bal = lambda c: page.evaluate("c => APP.bal(c)", c)
         go = lambda h: page.evaluate("h => { location.hash = h }", '#/' + h)
